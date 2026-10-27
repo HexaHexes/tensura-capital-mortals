@@ -1,0 +1,46 @@
+# Tensura Capital: Mortals
+
+Faction capitals for the mortal races - Humans, Elves, and Dwarves - for use
+with the Tensura Faction Spawn ecosystem.
+
+## What it does
+
+This datapack registers the capital cities for the mortal factions. Once a
+capital is registered here, the spawn mod picks it up automatically: a player
+who first picks (or reincarnates into) one of these races is placed at the
+nearest registered capital to the world spawn.
+
+The capitals are delivered as a plain datapack - no extra mods beyond the
+spawn mod and its own requirements.
+
+## Requirements
+
+- Minecraft 1.21.1 with NeoForge
+- Tensura Faction Spawn (and through it: Tensura: Reincarnated, ManasCore)
+
+## Installation
+
+Add this repository's `datapack/` folder (or a zip of it) to your world's
+`datapacks/` folder, or your server's datapack loading path. Run `/reload`
+afterwards and the capitals register.
+
+## Status
+
+Scaffold first: the registration and validation plumbing is live, and the
+city content lands faction by faction - Humans, then Elves, then Dwarves.
+
+## Credits
+
+- Built on [NeoForge](https://neoforged.net/).
+- Uses the race tag system from ManasCore / Tensura: Reincarnated.
+
+## License
+
+GNU Lesser General Public License v2.1 - see [`LICENSE`](LICENSE).
+Copyright (c) 2026 Bitwise Madness.
+
+## AI disclosure
+
+Parts of this project were written with the assistance of AI coding tools.
+AI-assisted code, data and documentation ship only after human review by the
+maintainers.
