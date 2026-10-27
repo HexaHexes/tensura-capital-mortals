@@ -118,7 +118,7 @@ def check_template_pools(documents: dict[Path, dict]) -> None:
             if not location:
                 continue
             namespace, _, template_path = location.partition(":")
-            template = DATAPACK / "data" / namespace / "structures" / f"{template_path}.nbt"
+            template = DATAPACK / "data" / namespace / "structure" / f"{template_path}.nbt"
             if not template.exists() and namespace not in EXTERNAL_NAMESPACES:
                 fail(f"{path.relative_to(REPO_ROOT)}: element {index} references missing "
                      f"template '{location}' (expected {template.relative_to(REPO_ROOT)})")
