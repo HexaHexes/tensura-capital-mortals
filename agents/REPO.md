@@ -31,9 +31,10 @@ validator.
   rename is a migration, not a refactor.
 - **Every structure needs a structure_set.** `findNearestMapStructure` only
   finds structures that belong to one; the validator enforces the pairing.
-- Jigsaw pool templates are NBT under `datapack/data/<ns>/structures/` - the
-  validator resolves every pool element reference against those files, and
-  silently-missing templates would break generation at runtime.
+- Jigsaw pool templates are NBT under `datapack/data/<ns>/structure/`
+  (singular - renamed from `structures/` in 1.21) - the validator resolves
+  every pool element reference against those files, and silently-missing
+  templates would break generation at runtime.
 - `gradle.properties` exists only to feed the version-bump workflow
   (`mod_version`); there is no build.
 - Worldgen placement is biome-constrained - a "find the city" test is
