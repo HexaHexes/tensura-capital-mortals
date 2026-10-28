@@ -26,8 +26,10 @@ afterwards and the capitals register.
 
 ## Status
 
-Scaffold first: the registration and validation plumbing is live, and the
-city content lands faction by faction - Humans, then Elves, then Dwarves.
+The **Humans capital is built and registered** - a gated stone-brick town
+(gate and plaza, streets, cottages and a keep, assembled by jigsaw from the
+templates in `datapack/data/tensura_capital_mortals/structure/humans/`).
+Elves and Dwarves follow.
 
 ## Credits
 
