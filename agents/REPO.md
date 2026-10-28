@@ -40,3 +40,15 @@ validator.
 - Worldgen placement is biome-constrained - a "find the city" test is
   environmental. Wiring (tags -> registered structures) is what the validator
   can prove headlessly.
+
+## CI & release model - this repo
+
+- `ci.yml` runs the `validate` check (`python tools/validate.py`) instead of the
+  template's junit/gametest jobs - there is no Java here. The template's three-check
+  model applies to this repo as its one check.
+- `version-bump.yml` ships; `gradle.properties` exists only to feed it (`mod_version`).
+- `release.yml`, `publish.yml` and `modrinth.yml` do not ship here: there is no
+  Gradle build to run or publish - the artefact is the zipped `datapack/` folder.
+  A release flow for this repo would be a datapack-specific variant (zip the
+  folder, attach it to the release, then the marketplace workflows could upload
+  it) - a deliberate future decision, not a silent omission.
