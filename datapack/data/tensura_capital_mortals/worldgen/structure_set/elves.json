@@ -1,0 +1,4 @@
+{
+  "placement": {"type": "minecraft:random_spread", "salt": 777002, "separation": 8, "spacing": 256},
+  "structures": [{"structure": "tensura_capital_mortals:elves", "weight": 1}]
+}
