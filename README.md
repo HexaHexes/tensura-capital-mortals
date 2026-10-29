@@ -26,10 +26,17 @@ afterwards and the capitals register.
 
 ## Status
 
-The **Humans capital is built and registered** - a gated stone-brick town
-(gate and plaza, streets, cottages and a keep, assembled by jigsaw from the
-templates in `datapack/data/tensura_capital_mortals/structure/humans/`).
-Elves and Dwarves follow.
+**All three mortal capitals are built and registered:**
+
+- **Humans** — a gated stone-brick town (gate and plaza, streets, cottages, keep).
+- **Elves** — an ancient-forest clearing around a giant tree, with mossy
+  walkways, ground huts and treetop dwellings (generates in the forest family
+  and Tensura's `ancient_forest`).
+- **Dwarves** — a mountain gatehouse with the massif rising behind it and a
+  carved tunnel exit (generates in the mountain biomes).
+
+Templates are generated from committed code (`tools/gen_templates.py`), so the
+cities are regeneratable and reviewable as text.
 
 ## Credits
 

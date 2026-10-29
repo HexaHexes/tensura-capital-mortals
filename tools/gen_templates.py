@@ -36,6 +36,9 @@ STREETS_POOL = f"{NAMESPACE}:humans/streets"
 BUILDINGS_POOL = f"{NAMESPACE}:humans/buildings"
 STREETS_POOL_ELVES = f"{NAMESPACE}:elves/streets"
 BUILDINGS_POOL_ELVES = f"{NAMESPACE}:elves/buildings"
+STREETS_POOL_DWARVES = f"{NAMESPACE}:dwarves/streets"
+BUILDINGS_POOL_DWARVES = f"{NAMESPACE}:dwarves/buildings"
+ANDESITE = "minecraft:andesite"
 
 
 # --- minimal NBT writer -----------------------------------------------------
@@ -315,6 +318,89 @@ def build_elves_hut() -> Template:
     return t
 
 
+# --- the Dwarves capital pieces ---------------------------------------------
+
+def _rock(x: int, z: int) -> str:
+    mix = (x + z) % 3
+    return ANDESITE if mix == 0 else (COBBLE if mix == 1 else BRICK)
+
+
+def build_dwarves_start() -> Template:
+    """Mountain gatehouse: gate and plaza in front, the massif rising behind,
+    with a carved tunnel exit through the rock."""
+    t = Template(20, 16, 16)
+    t.fill(0, 0, 0, 19, 0, 15, COBBLE)                     # plaza floor
+    t.fill(0, 1, 0, 19, 6, 0, BRICK)                       # gate wall
+    t.fill(8, 1, 0, 11, 4, 0, "minecraft:air")             # arch opening
+    t.fill(8, 5, 0, 11, 6, 0, BRICK)                       # arch top
+    for x, z in ((0, 0), (1, 0), (18, 0), (19, 0)):        # gate towers
+        t.fill(x, 1, z, x, 8, z, BRICK)
+    t.walls(0, 0, 19, 8, 1, 5, BRICK)                      # courtyard side walls
+    # the massif rising behind the gate (tallest at the back)
+    for z in range(8, 16):
+        top = 5 + (z - 8)
+        for x in range(0, 20):
+            for y in range(1, top + 1):
+                t.set(x, y, z, _rock(x, z))
+    # carved tunnel exit through the rock
+    t.fill(9, 1, 12, 10, 3, 15, "minecraft:air")
+    t.jigsaw(9, 1, 0, "south_up", STREETS_POOL_DWARVES)
+    t.jigsaw(9, 1, 15, "north_up", STREETS_POOL_DWARVES)
+    t.jigsaw(19, 1, 8, "east_up", STREETS_POOL_DWARVES)
+    t.jigsaw(0, 1, 8, "west_up", STREETS_POOL_DWARVES)
+    return t
+
+
+def build_dwarves_street() -> Template:
+    """Stone-brick road: continues roads, pulls halls and keeps at the sides."""
+    t = Template(16, 4, 16)
+    t.fill(6, 0, 0, 9, 0, 15, BRICK)
+    t.jigsaw(7, 1, 0, "south_up", STREETS_POOL_DWARVES)
+    t.jigsaw(7, 1, 15, "north_up", STREETS_POOL_DWARVES)
+    t.jigsaw(0, 1, 7, "west_up", BUILDINGS_POOL_DWARVES)
+    t.jigsaw(15, 1, 7, "east_up", BUILDINGS_POOL_DWARVES)
+    return t
+
+
+def build_dwarves_hall() -> Template:
+    """Stone hall with a glass slit band."""
+    t = Template(13, 8, 13)
+    t.fill(0, 0, 0, 12, 0, 12, COBBLE)
+    t.walls(0, 0, 12, 12, 1, 5, BRICK)
+    for z in range(1, 12):
+        if z % 2 == 0:
+            t.set(0, 4, z, GLASS)
+            t.set(12, 4, z, GLASS)
+    t.fill(6, 1, 0, 6, 2, 0, "minecraft:air")              # door gap (south)
+    t.fill(0, 6, 0, 12, 6, 12, BRICK)                      # roof
+    t.walls(0, 0, 12, 12, 7, 7, BRICK)                     # roof rim
+    t.jigsaw(6, 1, 0, "south_up", BUILDINGS_POOL_DWARVES)
+    return t
+
+
+def build_dwarves_keep() -> Template:
+    """Tall stone keep with a battlemented roof."""
+    t = Template(13, 18, 13)
+    t.fill(0, 0, 0, 12, 0, 12, COBBLE)
+    t.walls(0, 0, 12, 12, 1, 11, BRICK)
+    for z in range(1, 12):
+        if z % 2 == 0:
+            t.set(0, 5, z, GLASS)
+            t.set(12, 5, z, GLASS)
+    for x in range(1, 12):
+        if x % 2 == 0:
+            t.set(x, 5, 0, GLASS)
+            t.set(x, 5, 12, GLASS)
+    t.fill(6, 1, 0, 6, 2, 0, "minecraft:air")              # door gap (south)
+    t.fill(0, 12, 0, 12, 12, 12, BRICK)                    # roof
+    for x in range(0, 13):
+        for z in range(0, 13):
+            if (x in (0, 12) or z in (0, 12)) and (x + z) % 2 == 0:
+                t.set(x, 13, z, BRICK)                     # battlements
+    t.jigsaw(6, 1, 0, "south_up", BUILDINGS_POOL_DWARVES)
+    return t
+
+
 PIECES = {
     "humans/start": build_start,
     "humans/street": build_street,
@@ -324,6 +410,10 @@ PIECES = {
     "elves/street": build_elves_street,
     "elves/treetop": build_elves_treetop,
     "elves/hut": build_elves_hut,
+    "dwarves/start": build_dwarves_start,
+    "dwarves/street": build_dwarves_street,
+    "dwarves/hall": build_dwarves_hall,
+    "dwarves/keep": build_dwarves_keep,
 }
 
 
