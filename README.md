@@ -26,9 +26,6 @@ nearest registered capital to the world spawn.
 - **Dwarves**: a mountain gatehouse with the massif rising behind it and a
   carved tunnel exit (generates in the mountain biomes).
 
-Templates are generated from committed code (`tools/gen_templates.py`), so the
-cities are regeneratable and reviewable as text.
-
 ## Credits
 
 - Built on [NeoForge](https://neoforged.net/).
