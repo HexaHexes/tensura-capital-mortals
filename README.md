@@ -1,6 +1,6 @@
 # Tensura Capital: Mortals
 
-Faction capitals for the mortal races, Humans, Elves and Dwarves, for use with
+Faction capitals for the mortal races: Humans, Elves and Dwarves, for use with
 the Tensura Faction Spawn ecosystem.
 
 ## What it does
@@ -11,9 +11,8 @@ who first picks (or reincarnates into) one of these races is placed at the
 nearest registered capital to the world spawn.
 
 The capitals are a plain datapack, needing no extra mods beyond the spawn mod
-and its own requirements. Add this repository's `datapack/` folder (or a zip of
-it) to your world's `datapacks/` folder or your server's datapack loading path,
-then run `/reload` and the capitals register.
+and its own requirements. Each of the three capital datapacks is being revised
+into a full Java mod.
 
 ## Requirements
 
