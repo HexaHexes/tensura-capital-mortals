@@ -30,10 +30,12 @@ TAG_COMPOUND = 10
 
 DATA_VERSION = 3955  # 1.21.1
 NAMESPACE = "tensura_capital_mortals"
-OUT = Path(__file__).resolve().parent.parent / "datapack" / "data" / NAMESPACE / "structure" / "humans"
+OUT = Path(__file__).resolve().parent.parent / "datapack" / "data" / NAMESPACE / "structure"
 
 STREETS_POOL = f"{NAMESPACE}:humans/streets"
 BUILDINGS_POOL = f"{NAMESPACE}:humans/buildings"
+STREETS_POOL_ELVES = f"{NAMESPACE}:elves/streets"
+BUILDINGS_POOL_ELVES = f"{NAMESPACE}:elves/buildings"
 
 
 # --- minimal NBT writer -----------------------------------------------------
@@ -242,18 +244,96 @@ def build_keep() -> Template:
     return t
 
 
+# --- the Elves capital pieces -----------------------------------------------
+
+MOSS = "minecraft:moss_block"
+LEAVES = "minecraft:oak_leaves"
+
+
+def build_elves_start() -> Template:
+    """Forest clearing with a giant ancient tree: the elves' origin piece."""
+    t = Template(16, 13, 16)
+    t.fill(0, 0, 0, 15, 0, 15, MOSS)                       # clearing floor
+    # giant ancient tree: 3x3 trunk, wide canopy
+    t.fill(7, 1, 7, 9, 9, 9, LOG)
+    for y in range(6, 13):
+        radius = 6 - (y - 6) // 2
+        for x in range(8 - radius, 9 + radius):
+            for z in range(8 - radius, 9 + radius):
+                if t.blocks.get((x, y, z)) is None and not (x == 8 and z == 8 and y <= 9):
+                    t.set(x, y, z, LEAVES, persistent="true")
+    # mossy stone ring
+    for i in range(16):
+        t.set(i, 0, 0, BRICK)
+        t.set(i, 0, 15, BRICK)
+        t.set(0, 0, i, BRICK)
+        t.set(15, 0, i, BRICK)
+    t.jigsaw(7, 1, 0, "south_up", STREETS_POOL_ELVES)
+    t.jigsaw(8, 1, 15, "north_up", STREETS_POOL_ELVES)
+    t.jigsaw(15, 1, 8, "east_up", STREETS_POOL_ELVES)
+    t.jigsaw(0, 1, 8, "west_up", STREETS_POOL_ELVES)
+    return t
+
+
+def build_elves_street() -> Template:
+    """Mossy walkway: continues paths, pulls elven buildings at the sides."""
+    t = Template(16, 4, 16)
+    t.fill(6, 0, 0, 9, 0, 15, MOSS)
+    t.jigsaw(7, 1, 0, "south_up", STREETS_POOL_ELVES)
+    t.jigsaw(7, 1, 15, "north_up", STREETS_POOL_ELVES)
+    t.jigsaw(0, 1, 7, "west_up", BUILDINGS_POOL_ELVES)
+    t.jigsaw(15, 1, 7, "east_up", BUILDINGS_POOL_ELVES)
+    return t
+
+
+def build_elves_treetop() -> Template:
+    """Hut on a trunk: the elves' elevated dwelling."""
+    t = Template(9, 13, 9)
+    t.fill(4, 0, 4, 4, 6, 4, LOG)                          # trunk
+    t.fill(2, 7, 2, 6, 7, 6, PLANKS)                       # platform
+    t.walls(2, 2, 6, 6, 8, 9, PLANKS)
+    t.fill(4, 8, 2, 4, 9, 2, "minecraft:air")              # doorway (south)
+    t.set(2, 9, 4, GLASS)
+    t.set(6, 9, 4, GLASS)
+    t.fill(1, 10, 1, 7, 10, 7, LEAVES, persistent="true")  # leaf roof
+    t.fill(3, 11, 3, 5, 11, 5, LEAVES, persistent="true")
+    t.jigsaw(4, 1, 3, "south_up", BUILDINGS_POOL_ELVES)    # consumed on attach; in front of the trunk
+    return t
+
+
+def build_elves_hut() -> Template:
+    """Ground hut with a leaf roof."""
+    t = Template(7, 6, 7)
+    t.fill(0, 0, 0, 6, 0, 6, MOSS)
+    t.walls(0, 0, 6, 6, 1, 2, PLANKS)
+    for x, z in ((0, 0), (6, 0), (0, 6), (6, 6)):
+        t.fill(x, 1, z, x, 2, z, LOG)
+    t.fill(3, 1, 0, 3, 2, 0, "minecraft:air")              # door gap (south)
+    t.fill(0, 3, 0, 6, 3, 6, LEAVES, persistent="true")    # leaf roof
+    t.fill(1, 4, 1, 5, 4, 5, LEAVES, persistent="true")
+    t.jigsaw(3, 1, 0, "south_up", BUILDINGS_POOL_ELVES)
+    return t
+
+
+PIECES = {
+    "humans/start": build_start,
+    "humans/street": build_street,
+    "humans/house": build_house,
+    "humans/keep": build_keep,
+    "elves/start": build_elves_start,
+    "elves/street": build_elves_street,
+    "elves/treetop": build_elves_treetop,
+    "elves/hut": build_elves_hut,
+}
+
+
 def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
-    pieces = {
-        "start": build_start(),
-        "street": build_street(),
-        "house": build_house(),
-        "keep": build_keep(),
-    }
-    for name, template in pieces.items():
+    for name, builder in PIECES.items():
+        template = builder()
         path = OUT / f"{name}.nbt"
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(template.to_nbt())
-        print(f"wrote {path.relative_to(OUT.parent.parent.parent.parent)} "
+        print(f"wrote data/{NAMESPACE}/structure/{name}.nbt "
               f"({len(template.blocks)} blocks, {len(template.palette)} palette entries)")
 
 
