@@ -5,19 +5,15 @@ the Tensura Faction Spawn ecosystem.
 
 ## What it does
 
-This datapack registers the capital cities for the mortal factions. Once a
+This mod registers the capital cities for the mortal factions. Once a
 capital is registered here, the spawn mod picks it up automatically: a player
 who first picks (or reincarnates into) one of these races is placed at the
 nearest registered capital to the world spawn.
 
-The capitals are a plain datapack, needing no extra mods beyond the spawn mod
-and its own requirements. Each of the three capital datapacks is being revised
-into a full Java mod.
-
 ## Requirements
 
 - Minecraft 1.21.1 with NeoForge
-- Tensura Faction Spawn (and through it: Tensura: Reincarnated, ManasCore)
+- Tensura Faction Spawn and Tensura: Reincarnated (ManasCore ships with Tensura)
 
 ## Status
 

@@ -30,7 +30,7 @@ TAG_COMPOUND = 10
 
 DATA_VERSION = 3955  # 1.21.1
 NAMESPACE = "tensura_capital_mortals"
-OUT = Path(__file__).resolve().parent.parent / "datapack" / "data" / NAMESPACE / "structure"
+OUT = Path(__file__).resolve().parent.parent / "src" / "main" / "resources" / "data" / NAMESPACE / "structure"
 
 STREETS_POOL = f"{NAMESPACE}:humans/streets"
 BUILDINGS_POOL = f"{NAMESPACE}:humans/buildings"
@@ -80,7 +80,8 @@ def int_list(values) -> tuple[int, list]:
 
 
 def encode_root(body) -> bytes:
-    return gzip.compress(bytes([TAG_COMPOUND]) + _string("") + _payload(TAG_COMPOUND, body))
+    # mtime=0 keeps regeneration byte-deterministic (no phantom diffs on rebuild).
+    return gzip.compress(bytes([TAG_COMPOUND]) + _string("") + _payload(TAG_COMPOUND, body), mtime=0)
 
 
 # --- template builder -------------------------------------------------------
