@@ -1,32 +1,30 @@
 # Tensura Capital: Mortals
 
-Capital cities for the mortal races - Humans, Elves, and Dwarves - for use
-with the Tensura Faction Spawn ecosystem.
+Faction capitals for the mortal races: Humans, Elves and Dwarves, for use with
+the Tensura Faction Spawn ecosystem.
 
 ## What it does
 
-Registers the capital cities for the mortal factions. Once registered, the
-spawn mod picks them up automatically: a player who first picks (or
-reincarnates into) one of these races is placed at the nearest registered
-capital to the world spawn.
+This mod registers the capital cities for the mortal factions. Once a
+capital is registered here, the spawn mod picks it up automatically: a player
+who first picks (or reincarnates into) one of these races is placed at the
+nearest registered capital to the world spawn.
 
-- **Humans** - a gated stone-brick town (gate and plaza, streets, cottages, keep).
-- **Elves** - an ancient-forest clearing around a giant tree, mossy walkways,
-  ground huts and treetop dwellings (generates in the forest family and
-  Tensura's ancient forest).
-- **Dwarves** - a mountain gatehouse with the massif rising behind it and a
+## Requirements
+
+- Minecraft 1.21.1 with NeoForge
+- Tensura Faction Spawn and Tensura: Reincarnated (ManasCore ships with Tensura)
+
+## Status
+
+**All three mortal capitals are built and registered:**
+
+- **Humans**: a gated stone-brick town (gate and plaza, streets, cottages, keep).
+- **Elves**: an ancient-forest clearing around a giant tree, with mossy
+  walkways, ground huts and treetop dwellings (generates in the forest family
+  and Tensura's `ancient_forest`).
+- **Dwarves**: a mountain gatehouse with the massif rising behind it and a
   carved tunnel exit (generates in the mountain biomes).
-
-Install like any mod, alongside Tensura Faction Spawn.
-
-## Dependencies
-
-| | Mod | Why |
-|---|---|---|
-| Required | Minecraft | - |
-| Required | NeoForge | - |
-| Required | Tensura Faction Spawn | Owns the central capital tags and arrival behaviour |
-| Required | Tensura: Reincarnated | The Elves capital generates in Tensura's ancient forest |
 
 ## Credits
 
