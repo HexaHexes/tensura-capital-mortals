@@ -1,7 +1,7 @@
 package org.bitwisemadness.tensuracapitalmortals.gametest;
 
+import java.util.List;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -11,9 +11,6 @@ import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import org.bitwisemadness.tensuracapitalmortals.TensuraCapitalMortals;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Registry-level coverage: the three capitals are registered structures and
