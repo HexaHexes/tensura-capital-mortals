@@ -53,8 +53,8 @@ neoForge {
 
         // Regenerates src/generated/resources - the jigsaw structures, sets,
         // pools, capital tags (issue #19) and the twelve template NBTs that
-        // replace tools/gen_templates.py. The mod has no runtime dependencies,
-        // so the data run needs no staged stack.
+        // replace tools/gen_templates.py. Boots FML like every run, so the
+        // staged dependency stack below satisfies the toml's mandatory deps.
         data {
             data()
             gameDirectory = project.layout.projectDirectory.dir('run')
@@ -162,7 +162,11 @@ tasks.register('prepareGametestMods', Copy) {
     into 'run/mods'
 }
 
-tasks.matching { it.name == 'runGameTestServer' }.configureEach {
+// Both the GameTest run and the data run boot FML against the run/
+// directory, so both need the dependency stack staged first - the mods
+// toml's mandatory dependencies (tensura, the spawn mod) must resolve
+// or datagen never boots.
+tasks.matching { it.name == 'runGameTestServer' || it.name == 'runData' }.configureEach {
     dependsOn 'prepareGametestMods'
 }
 
