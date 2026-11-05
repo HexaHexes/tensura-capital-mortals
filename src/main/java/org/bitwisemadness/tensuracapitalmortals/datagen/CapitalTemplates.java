@@ -86,8 +86,12 @@ public final class CapitalTemplates {
         }
 
         private int state(String name, String... props) {
+            if (props.length % 2 != 0) {
+                throw new IllegalArgumentException(
+                        "block state properties must be key/value pairs: " + name);
+            }
             Map<String, String> sorted = new TreeMap<>();
-            for (int i = 0; i < props.length; i += 2) {
+            for (int i = 0; i + 1 < props.length; i += 2) {
                 sorted.put(props[i], props[i + 1]);
             }
             State state = new State(name, sorted);
