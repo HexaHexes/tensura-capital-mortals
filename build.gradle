@@ -50,6 +50,18 @@ neoForge {
             type = "gameTestServer"
             gameDirectory = project.layout.projectDirectory.dir('run')
         }
+
+        // Regenerates src/generated/resources - the jigsaw structures, sets,
+        // pools, capital tags (issue #19) and the twelve template NBTs that
+        // replace tools/gen_templates.py. The mod has no runtime dependencies,
+        // so the data run needs no staged stack.
+        data {
+            data()
+            gameDirectory = project.layout.projectDirectory.dir('run')
+            programArguments.addAll '--mod', mod_id, '--all',
+                    '--output', file('src/generated/resources').absolutePath,
+                    '--existing', file('src/main/resources').absolutePath
+        }
     }
 
     mods {
@@ -87,6 +99,10 @@ def generateModMetadata = tasks.register('generateModMetadata', ProcessResources
 // Feed the generated metadata in as a resource dir; passing the task provider
 // wires the dependency so the toml is generated before resources are processed.
 sourceSets.main.resources.srcDir generateModMetadata
+// The generated datapack is committed and packaged as part of the mod's
+// resources: datagen owns data/** (issue #19) and the CI drift gate keeps
+// the committed tree identical to what runData produces.
+sourceSets.main.resources.srcDir 'src/generated/resources'
 neoForge.ideSyncTask generateModMetadata
 
 tasks.withType(JavaCompile).configureEach {

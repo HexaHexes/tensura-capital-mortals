@@ -35,7 +35,8 @@ import org.junit.jupiter.api.Test;
  */
 class DatapackValidationTest {
 
-    private static final Path DATA = Path.of("src", "main", "resources", "data");
+    private static final Path DATA =
+            Path.of("src", "generated", "resources", "data");
     private static final String OWN_NAMESPACE = "tensura_capital_mortals";
     private static final Set<String> EXTERNAL_NAMESPACES = Set.of("minecraft", "tensura");
 
