@@ -86,6 +86,9 @@ jobs:
       # The checks themselves are the ones proven green on
       # tensura-iaf-growth's build job and tensura-iss-growth#18.
       - name: Regenerate the datapack and fail on drift
+        env:
+          PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN || github.token }}
         run: |
           set -euo pipefail
 

@@ -11,6 +11,8 @@ import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import org.bitwisemadness.tensuracapitalmortals.TensuraCapitalMortals;
+import org.bitwisemadness.tensuracapitalmortals.datagen.CapitalContent;
+import org.bitwisemadness.tensuracapitalmortals.datagen.CapitalTemplates;
 
 /**
  * Registry-level coverage: the three capitals are registered structures and
@@ -49,7 +51,24 @@ public final class CapitalMortalsGameTests {
             boolean containsOwn = holders.orElseThrow().stream().anyMatch(h -> containsFaction(h, faction));
             helper.assertTrue(containsOwn, "capital tag " + tag.location() + " is missing the " + faction + " capital");
         }
+
+        // Every datagen-produced file must ship and resolve on the live
+        // classpath (issue #19); this also re-runs the table validation.
+        CapitalContent.files().keySet().forEach(path -> requireResource(helper, path));
+        CapitalTemplates.files().keySet().forEach(path -> requireResource(helper, path));
         helper.succeed();
+    }
+
+    private static void requireResource(GameTestHelper helper, String path) {
+        // The capital tag anchors live in the tensura_faction_spawn
+        // namespace, so the id derives from the path, never from MOD_ID.
+        String relative = path.substring("data/".length());
+        String namespace = relative.substring(0, relative.indexOf('/'));
+        var id = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                namespace, relative.substring(relative.indexOf('/') + 1));
+        helper.assertTrue(
+                helper.getLevel().getServer().getResourceManager().getResource(id).isPresent(),
+                "generated datapack file missing at runtime: " + path);
     }
 
     private static boolean containsFaction(Holder<net.minecraft.world.level.levelgen.structure.Structure> holder,

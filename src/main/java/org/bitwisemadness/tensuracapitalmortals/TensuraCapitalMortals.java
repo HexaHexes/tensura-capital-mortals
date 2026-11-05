@@ -3,6 +3,11 @@ package org.bitwisemadness.tensuracapitalmortals;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import org.bitwisemadness.tensuracapitalmortals.datagen.CapitalContent;
+import org.bitwisemadness.tensuracapitalmortals.datagen.CapitalTemplates;
+import org.bitwisemadness.tensuracapitalmortals.datagen.JsonFilesProvider;
+import org.bitwisemadness.tensuracapitalmortals.datagen.NbtFilesProvider;
 import org.slf4j.Logger;
 
 /**
@@ -21,6 +26,24 @@ public final class TensuraCapitalMortals {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public TensuraCapitalMortals(IEventBus modBus) {
+        modBus.addListener(this::gatherData);
         LOGGER.info("Tensura Capital: Mortals initialized");
+    }
+
+    /**
+     * Feeds the shipped datapack - the jigsaw structures, structure sets,
+     * template pools, capital tag anchors ({@link CapitalContent}) and the
+     * twelve template pieces ({@link CapitalTemplates}), ported from the
+     * hand-authored originals and the retired generator script - into
+     * datagen (issue #19).
+     */
+    private void gatherData(GatherDataEvent event) {
+        if (!event.includeServer()) {
+            return;
+        }
+        event.addProvider(new JsonFilesProvider("capital_json",
+                event.getGenerator().getPackOutput(), CapitalContent.files()));
+        event.addProvider(new NbtFilesProvider("capital_templates",
+                event.getGenerator().getPackOutput(), CapitalTemplates.files()));
     }
 }

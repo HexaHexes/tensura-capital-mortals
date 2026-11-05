@@ -50,6 +50,18 @@ neoForge {
             type = "gameTestServer"
             gameDirectory = project.layout.projectDirectory.dir('run')
         }
+
+        // Regenerates src/generated/resources - the jigsaw structures, sets,
+        // pools, capital tags (issue #19) and the twelve template NBTs that
+        // replace tools/gen_templates.py. Boots FML like every run, so the
+        // staged dependency stack below satisfies the toml's mandatory deps.
+        data {
+            data()
+            gameDirectory = project.layout.projectDirectory.dir('run')
+            programArguments.addAll '--mod', mod_id, '--all',
+                    '--output', file('src/generated/resources').absolutePath,
+                    '--existing', file('src/main/resources').absolutePath
+        }
     }
 
     mods {
@@ -87,6 +99,10 @@ def generateModMetadata = tasks.register('generateModMetadata', ProcessResources
 // Feed the generated metadata in as a resource dir; passing the task provider
 // wires the dependency so the toml is generated before resources are processed.
 sourceSets.main.resources.srcDir generateModMetadata
+// The generated datapack is committed and packaged as part of the mod's
+// resources: datagen owns data/** (issue #19) and the CI drift gate keeps
+// the committed tree identical to what runData produces.
+sourceSets.main.resources.srcDir 'src/generated/resources'
 neoForge.ideSyncTask generateModMetadata
 
 tasks.withType(JavaCompile).configureEach {
@@ -146,7 +162,11 @@ tasks.register('prepareGametestMods', Copy) {
     into 'run/mods'
 }
 
-tasks.matching { it.name == 'runGameTestServer' }.configureEach {
+// Both the GameTest run and the data run boot FML against the run/
+// directory, so both need the dependency stack staged first - the mods
+// toml's mandatory dependencies (tensura, the spawn mod) must resolve
+// or datagen never boots.
+tasks.matching { it.name == 'runGameTestServer' || it.name == 'runData' }.configureEach {
     dependsOn 'prepareGametestMods'
 }
 
